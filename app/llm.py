@@ -19,6 +19,8 @@ CRITICAL_TERMS = {
     "coffee": ["coffee", "кава", "каву", "кави"],
     "subscriptions": ["subscriptions", "підписки", "підписок", "підписка"],
     "credit_card": ["credit", "credit card", "кредит", "кредитна", "кредитній", "кредитної", "картка", "картці"],
+    "weekday_exact": ["будні"],
+    "weekend_exact": ["вихідні"],
     "Sportlife": ["Sportlife", "sportlife"],
     "Netflix": ["Netflix", "netflix"],
     "Booking.com": ["Booking.com", "booking.com"],
@@ -43,6 +45,22 @@ def _extract_numbers(text: str) -> list[str]:
     Потрібно, щоб LLM не загубив важливі суми.
     """
     return re.findall(r"\d+(?:\.\d+)?", text)
+
+def _calculate_cost_usd(prompt_tokens: int, completion_tokens: int) -> float:
+    """
+    Оцінює вартість LLM-виклику на основі token usage.
+
+    Ціни беруться з .env:
+    - OPENROUTER_INPUT_PRICE_PER_1M
+    - OPENROUTER_OUTPUT_PRICE_PER_1M
+    """
+    input_price_per_1m = float(os.getenv("OPENROUTER_INPUT_PRICE_PER_1M", "0"))
+    output_price_per_1m = float(os.getenv("OPENROUTER_OUTPUT_PRICE_PER_1M", "0"))
+
+    input_cost = (prompt_tokens / 1_000_000) * input_price_per_1m
+    output_cost = (completion_tokens / 1_000_000) * output_price_per_1m
+
+    return round(input_cost + output_cost, 8)
 
 
 def _missing_required_parts(fallback_answer: str, llm_answer: str) -> list[str]:
@@ -79,6 +97,17 @@ def _missing_required_parts(fallback_answer: str, llm_answer: str) -> list[str]:
 
         if not term_is_present:
             missing.append(canonical_term)
+
+    if "$" in fallback_answer:
+        has_usd_marker = "$" in llm_answer or "usd" in llm_lower
+        has_uah_marker = "грн" in llm_lower or "uah" in llm_lower
+
+        if not has_usd_marker:
+            missing.append("USD currency marker")
+
+        if has_uah_marker:
+            missing.append("currency changed to UAH")
+
 
     return missing
 
@@ -148,10 +177,13 @@ def generate_finance_answer(
 
 Правила:
 - використовуй тільки числа з TOOL_RESULT;
+- валюта датасету USD; суми показуй як $ або USD;
+- ніколи не замінюй $ на грн або UAH;
 - не вигадуй додаткові факти;
 - не змінюй merchant names;
 - збережи важливі суми, дати й категорії;
 - якщо у fallback є технічні категорії delivery, coffee, subscriptions — збережи їх у дужках поряд з українським поясненням;
+- якщо у fallback є слова будні та вихідні — збережи саме слова будні та вихідні;
 - відповідь має бути коротка й actionable;
 - не додавай зайвих фінальних питань;
 - не використовуй фрази типу "Які думки?";
@@ -191,6 +223,10 @@ DETERMINISTIC_FALLBACK_ANSWER:
         prompt_tokens = getattr(usage, "prompt_tokens", 0) if usage else 0
         completion_tokens = getattr(usage, "completion_tokens", 0) if usage else 0
         total_tokens = getattr(usage, "total_tokens", prompt_tokens + completion_tokens) if usage else 0
+        cost_usd = _calculate_cost_usd(
+            prompt_tokens=prompt_tokens,
+            completion_tokens=completion_tokens,
+        )
 
         missing_parts = _missing_required_parts(
             fallback_answer=fallback_answer,
@@ -201,7 +237,7 @@ DETERMINISTIC_FALLBACK_ANSWER:
             return {
                 "answer": fallback_answer,
                 "tokens": total_tokens,
-                "cost_usd": 0,
+                "cost_usd": cost_usd,
                 "used_llm": False,
                 "warning": (
                     "LLM answer rejected because it missed required parts: "
@@ -212,7 +248,7 @@ DETERMINISTIC_FALLBACK_ANSWER:
         return {
             "answer": llm_answer,
             "tokens": total_tokens,
-            "cost_usd": 0,
+            "cost_usd": cost_usd,
             "used_llm": True,
             "warning": "",
         }

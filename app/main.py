@@ -8,6 +8,7 @@ from app.agents.baseline_agent import run_baseline
 from app.agents.crew_agent import run_crew
 from app.schemas import AskRequest, AskResponse
 from app.tools.finance_tools import dataset_summary
+from app.memory import enrich_question_with_memory, remember_turn
 
 
 app = FastAPI(
@@ -34,14 +35,19 @@ def ask(request: AskRequest) -> AskResponse:
     started = time.perf_counter()
 
     try:
+        effective_question = enrich_question_with_memory(
+            question=request.question,
+            session_id=request.session_id,
+        )
+
         if request.architecture == "baseline":
             response = run_baseline(
-                question=request.question,
+                question=effective_question,
                 session_id=request.session_id,
             )
         elif request.architecture == "crew":
             response = run_crew(
-                question=request.question,
+                question=effective_question,
                 session_id=request.session_id,
             )
         else:
@@ -49,6 +55,16 @@ def ask(request: AskRequest) -> AskResponse:
                 status_code=400,
                 detail="architecture must be 'baseline' or 'crew'",
             )
+
+        remember_turn(
+            session_id=request.session_id,
+            user_question=request.question,
+            effective_question=effective_question,
+            response=response,
+        )
+
+        if effective_question != request.question:
+            response.warnings.append("Used previous session context for this follow-up question.")
 
         response.latency_ms = round((time.perf_counter() - started) * 1000, 2)
         return response

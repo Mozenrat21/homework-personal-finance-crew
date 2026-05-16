@@ -5,11 +5,11 @@
     "success_rate": 1.0,
     "tool_selection_accuracy": 1.0,
     "groundedness_proxy": 1.0,
-    "latency_p50_ms": 3894.46,
-    "latency_p95_ms": 5843.68,
+    "latency_p50_ms": 3437.29,
+    "latency_p95_ms": 5281.46,
     "avg_trace_steps": 0.93,
-    "cost_per_task_usd": 0.0,
-    "tokens_per_task": 818.2
+    "cost_per_task_usd": 0.00109323,
+    "tokens_per_task": 874.27
   },
   "crew": {
     "total_cases": 15,
@@ -17,11 +17,11 @@
     "success_rate": 1.0,
     "tool_selection_accuracy": 1.0,
     "groundedness_proxy": 1.0,
-    "latency_p50_ms": 3931.89,
-    "latency_p95_ms": 6077.31,
+    "latency_p50_ms": 3448.24,
+    "latency_p95_ms": 5430.94,
     "avg_trace_steps": 3.0,
-    "cost_per_task_usd": 0.0,
-    "tokens_per_task": 688.67
+    "cost_per_task_usd": 0.00094997,
+    "tokens_per_task": 743.47
   },
   "comparison": {
     "crew_extra_trace_steps": 2.07,
