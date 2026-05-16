@@ -5,6 +5,7 @@ from typing import Any
 
 from app.schemas import AskResponse, TraceStep
 from app.tracing import traceable
+from app.llm import generate_finance_answer
 from app.tools.finance_tools import (
     credit_card_behavior,
     dataset_summary,
@@ -287,11 +288,38 @@ def run_crew(question: str, session_id: str | None = None) -> AskResponse:
     answer, answer_step = advisor_agent(analysis)
     trace.append(answer_step)
 
+    if analysis["intent"] in ["out_of_scope", "fraud_escalation"]:
+        return AskResponse(
+            architecture="crew",
+            answer=answer,
+            data=analysis["tool_result"],
+            trace=trace,
+            cost_usd=0,
+            tokens=0,
+            warnings=[],
+        )
+
+    llm_result = generate_finance_answer(
+        question=question,
+        architecture="crew",
+        intent=analysis["intent"],
+        tool_name=analysis["tool_name"],
+        tool_result=analysis["tool_result"],
+        fallback_answer=answer,
+    )
+
+    final_answer = llm_result["answer"]
+    warnings = []
+
+    if llm_result.get("warning"):
+        warnings.append(llm_result["warning"])
+
     return AskResponse(
         architecture="crew",
-        answer=answer,
+        answer=final_answer,
         data=analysis["tool_result"],
         trace=trace,
-        cost_usd=0,
-        tokens=0,
+        cost_usd=llm_result.get("cost_usd", 0),
+        tokens=llm_result.get("tokens", 0),
+        warnings=warnings,
     )

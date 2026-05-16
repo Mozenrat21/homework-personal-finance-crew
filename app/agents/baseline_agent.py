@@ -5,6 +5,7 @@ from typing import Any
 
 from app.schemas import AskResponse, TraceStep
 from app.tracing import traceable
+from app.llm import generate_finance_answer
 from app.tools.finance_tools import (
     credit_card_behavior,
     dataset_summary,
@@ -242,11 +243,29 @@ def run_baseline(question: str, session_id: str | None = None) -> AskResponse:
             f"У датасеті {data['rows']} транзакції за період {data['date_min']} — {data['date_max']}."
         )
 
+    tool_name = trace[-1].name if trace else "none"
+
+    llm_result = generate_finance_answer(
+        question=question,
+        architecture="baseline",
+        intent="single_agent_rule_based",
+        tool_name=tool_name,
+        tool_result=data,
+        fallback_answer=answer,
+    )
+
+    final_answer = llm_result["answer"]
+    warnings = []
+
+    if llm_result.get("warning"):
+        warnings.append(llm_result["warning"])
+
     return AskResponse(
         architecture="baseline",
-        answer=answer,
+        answer=final_answer,
         data=data,
         trace=trace,
-        cost_usd=0,
-        tokens=0,
+        cost_usd=llm_result.get("cost_usd", 0),
+        tokens=llm_result.get("tokens", 0),
+        warnings=warnings,
     )

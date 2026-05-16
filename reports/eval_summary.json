@@ -5,11 +5,11 @@
     "success_rate": 1.0,
     "tool_selection_accuracy": 1.0,
     "groundedness_proxy": 1.0,
-    "latency_p50_ms": 24.66,
-    "latency_p95_ms": 186.9,
+    "latency_p50_ms": 3894.46,
+    "latency_p95_ms": 5843.68,
     "avg_trace_steps": 0.93,
-    "cost_per_task_usd": 0,
-    "tokens_per_task": 0
+    "cost_per_task_usd": 0.0,
+    "tokens_per_task": 818.2
   },
   "crew": {
     "total_cases": 15,
@@ -17,14 +17,14 @@
     "success_rate": 1.0,
     "tool_selection_accuracy": 1.0,
     "groundedness_proxy": 1.0,
-    "latency_p50_ms": 28.48,
-    "latency_p95_ms": 93.01,
+    "latency_p50_ms": 3931.89,
+    "latency_p95_ms": 6077.31,
     "avg_trace_steps": 3.0,
-    "cost_per_task_usd": 0,
-    "tokens_per_task": 0
+    "cost_per_task_usd": 0.0,
+    "tokens_per_task": 688.67
   },
   "comparison": {
     "crew_extra_trace_steps": 2.07,
-    "note": "Cost and token metrics are 0 because this stage uses deterministic local rule-based agents without LLM calls."
+    "note": "LLM answer synthesis is enabled when USE_LLM=true. Financial calculations are still performed by deterministic pandas tools. If LLM output misses required numbers or entities, deterministic fallback is used."
   }
 }

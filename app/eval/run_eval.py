@@ -125,6 +125,9 @@ def evaluate_case(case: dict[str, Any], architecture: str) -> dict[str, Any]:
             "forbidden_ok": forbidden_ok,
             "latency_ms": latency_ms,
             "trace_steps": len(trace),
+            "tokens": int(result.get("tokens", 0) or 0),
+            "cost_usd": float(result.get("cost_usd", 0) or 0),
+            "warnings": " | ".join(result.get("warnings", [])),
             "answer": answer,
             "error": error,
         }
@@ -146,6 +149,9 @@ def evaluate_case(case: dict[str, Any], architecture: str) -> dict[str, Any]:
             "forbidden_ok": False,
             "latency_ms": round((time.perf_counter() - started) * 1000, 2),
             "trace_steps": 0,
+            "tokens": 0,
+            "cost_usd": 0,
+            "warnings": "",
             "answer": "",
             "error": str(error),
         }
@@ -170,6 +176,9 @@ def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
         tool_ok_count = sum(1 for row in rows if row["tool_ok"])
         grounded_ok_count = sum(1 for row in rows if row["must_include_ok"])
 
+        total_tokens = sum(int(row.get("tokens", 0) or 0) for row in rows)
+        total_cost = sum(float(row.get("cost_usd", 0) or 0) for row in rows)
+
         summary[architecture] = {
             "total_cases": total_count,
             "success_count": success_count,
@@ -182,8 +191,8 @@ def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
                 sum(row["trace_steps"] for row in rows) / total_count,
                 2,
             ),
-            "cost_per_task_usd": 0,
-            "tokens_per_task": 0,
+            "cost_per_task_usd": round(total_cost / total_count, 8),
+            "tokens_per_task": round(total_tokens / total_count, 2),
         }
 
     if "baseline" in summary and "crew" in summary:
@@ -193,8 +202,9 @@ def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
         summary["comparison"] = {
             "crew_extra_trace_steps": round(crew_steps - baseline_steps, 2),
             "note": (
-                "Cost and token metrics are 0 because this stage uses deterministic "
-                "local rule-based agents without LLM calls."
+                "LLM answer synthesis is enabled when USE_LLM=true. "
+                "Financial calculations are still performed by deterministic pandas tools. "
+                "If LLM output misses required numbers or entities, deterministic fallback is used."
             ),
         }
 

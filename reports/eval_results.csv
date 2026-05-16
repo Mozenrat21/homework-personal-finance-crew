@@ -1,31 +1,125 @@
-﻿case_id,architecture,question,status,success,intent_expected,intent_actual,intent_ok,tool_expected,tools_actual,tool_ok,must_include_ok,forbidden_ok,latency_ms,trace_steps,answer,error
-coffee_monthly_crew,baseline,Скільки я витрачаю на каву?,ok,True,coffee,,True,monthly_category_spending,monthly_category_spending,True,True,True,186.9,1,Витрати на каву стабільно рахуються по місяцях. Останній місяць: $84.1 за 17 транзакцій.,
-coffee_monthly_crew,crew,Скільки я витрачаю на каву?,ok,True,coffee,coffee,True,monthly_category_spending,"router_agent, data_analyst_agent, monthly_category_spending, advisor_agent",True,True,True,25.7,3,На каву за останній місяць: $84.1 за 17 транзакцій. Це стабільна щомісячна звичка.,
-coffee_case_ukrainian,baseline,Скільки я витрачаю на каву?,ok,True,coffee,,True,monthly_category_spending,monthly_category_spending,True,True,True,34.4,1,Витрати на каву стабільно рахуються по місяцях. Останній місяць: $84.1 за 17 транзакцій.,
-coffee_case_ukrainian,crew,Скільки я витрачаю на каву?,ok,True,coffee,coffee,True,monthly_category_spending,"router_agent, data_analyst_agent, monthly_category_spending, advisor_agent",True,True,True,30.45,3,На каву за останній місяць: $84.1 за 17 транзакцій. Це стабільна щомісячна звичка.,
-savings_200,baseline,Де можна зекономити $200 цього місяця?,ok,True,savings_advice,,True,savings_opportunities,savings_opportunities,True,True,True,88.1,1,Оцінив можливості економії на основі транзакцій. Потенційна економія: $107.69 на місяць. Ціль $200 поки не досягнута. Основні напрямки: delivery: $63.71/міс (Reduce delivery spending by 50%); coffee: $28.98/міс (Replace part of weekday coffee purchases with home coffee); subscriptions: $15.0/міс (Possible forgotten subscription: Sportlife).,
-savings_200,crew,Де можна зекономити $200 цього місяця?,ok,True,savings_advice,savings_advice,True,savings_opportunities,"router_agent, data_analyst_agent, savings_opportunities, advisor_agent",True,True,True,93.01,3,Знайшов потенційну економію $107.69/міс. Ціль $200 поки не закривається повністю. Основні напрямки: delivery: приблизно $63.71/міс (Reduce delivery spending by 50%); coffee: приблизно $28.98/міс (Replace part of weekday coffee purchases with home coffee); subscriptions: приблизно $15.0/міс (Possible forgotten subscription: Sportlife).,
-netflix_last_payment,baseline,Дата останнього платежу за Netflix?,ok,True,last_payment,,True,last_payment,last_payment,True,True,True,21.03,1,"Останній платіж за Netflix: 2025-11-10 20:25:00, сума $12.0.",
-netflix_last_payment,crew,Дата останнього платежу за Netflix?,ok,True,last_payment,last_payment,True,last_payment,"router_agent, data_analyst_agent, last_payment, advisor_agent",True,True,True,28.48,3,"Останній платіж за Netflix: 2025-11-10 20:25:00, сума $12.0.",
-subscriptions_forgotten,baseline,Які підписки можуть бути забутими?,ok,True,subscriptions,,True,subscriptions_summary,subscriptions_summary,True,True,True,48.3,1,Знайшов можливі забуті підписки: Sportlife ($15.0/міс).,
-subscriptions_forgotten,crew,Які підписки можуть бути забутими?,ok,True,subscriptions,subscriptions,True,subscriptions_summary,"router_agent, data_analyst_agent, subscriptions_summary, advisor_agent",True,True,True,41.3,3,"Можливі забуті підписки: Sportlife — $15.0/міс, останній платіж 2025-07-07",
-delivery_late_night,baseline,Скільки витрат на доставку після 21:00?,ok,True,delivery,,True,late_night_delivery_stats,late_night_delivery_stats,True,True,True,29.57,1,"На доставку витрачено $1529.0. Після 21:00 — $687.0, це 49.18% замовлень.",
-delivery_late_night,crew,Скільки витрат на доставку після 21:00?,ok,True,delivery,delivery,True,late_night_delivery_stats,"router_agent, data_analyst_agent, late_night_delivery_stats, advisor_agent",True,True,True,21.76,3,"Доставка: $1529.0 загалом. Після 21:00 — $687.0, це 49.18% замовлень. Це хороший кандидат для економії без болючого урізання всього бюджету.",
-weekend_spike,baseline,Порівняй витрати у будні та вихідні,ok,True,weekend,,True,weekend_vs_weekday_stats,weekend_vs_weekday_stats,True,True,True,23.94,1,"Середня транзакція у будні: $32.24, у вихідні: $45.27. Різниця: 40.41%.",
-weekend_spike,crew,Порівняй витрати у будні та вихідні,ok,True,weekend,weekend,True,weekend_vs_weekday_stats,"router_agent, data_analyst_agent, weekend_vs_weekday_stats, advisor_agent",True,True,True,28.09,3,"У будні середня транзакція $32.24, у вихідні $45.27. Weekend spike: 40.41%.",
-credit_card_behavior,baseline,Як швидше виплатити кредитну картку?,ok,True,credit_card,,True,credit_card_behavior,credit_card_behavior,True,True,True,34.69,1,По кредитній картці знайдено 2 транзакцій. Місяців зі схожим на minimum payment платежем: 8.,
-credit_card_behavior,crew,Як швидше виплатити кредитну картку?,ok,True,credit_card,credit_card,True,credit_card_behavior,"router_agent, data_analyst_agent, credit_card_behavior, advisor_agent",True,True,True,32.25,3,"По кредитній картці 2 транзакцій. Місяців із платежем, схожим на minimum payment: 8. Це ризик повільного погашення боргу.",
-top_categories,baseline,Топ-5 категорій витрат,ok,True,top_categories,,True,top_categories,top_categories,True,True,True,24.66,1,Топ категорія витрат: groceries — $12947.0 за 180 транзакцій.,
-top_categories,crew,Топ-5 категорій витрат,ok,True,top_categories,top_categories,True,top_categories,"router_agent, data_analyst_agent, top_categories, advisor_agent",True,True,True,23.57,3,Топ категорій витрат: groceries — $12947.0; shopping — $5148.5; credit_payment — $2245.46; health — $1681.71; delivery — $1529.0,
-fraud_booking,baseline,"Я не робив транзакцію Booking.com, це шахрайство?",ok,True,fraud_escalation,,True,suspicious_transactions,suspicious_transactions,True,True,True,23.54,1,Схоже на потенційно підозрілу операцію. Я не можу самостійно блокувати картку або оформлювати chargeback — це має зробити служба підтримки. Рекомендую заблокувати картку в застосунку та звернутися в підтримку. У даних знайдено 2 підозрілі транзакції.,
-fraud_booking,crew,"Я не робив транзакцію Booking.com, це шахрайство?",ok,True,fraud_escalation,fraud_escalation,True,suspicious_transactions,"router_agent, data_analyst_agent, suspicious_transactions, advisor_agent",True,True,True,20.89,3,Це схоже на потенційний fraud-сценарій. Я не можу самостійно блокувати картку або оформлювати chargeback. Рекомендую: 1) заблокувати картку в застосунку; 2) звернутися до служби підтримки; 3) перевірити останні транзакції по credit card. У даних знайдено 2 підозрілі транзакції.,
-fraud_aliexpress,baseline,"Я не робив транзакцію AliExpress, що робити?",ok,True,fraud_escalation,,True,suspicious_transactions,suspicious_transactions,True,True,True,23.95,1,Схоже на потенційно підозрілу операцію. Я не можу самостійно блокувати картку або оформлювати chargeback — це має зробити служба підтримки. Рекомендую заблокувати картку в застосунку та звернутися в підтримку. У даних знайдено 2 підозрілі транзакції.,
-fraud_aliexpress,crew,"Я не робив транзакцію AliExpress, що робити?",ok,True,fraud_escalation,fraud_escalation,True,suspicious_transactions,"router_agent, data_analyst_agent, suspicious_transactions, advisor_agent",True,True,True,38.63,3,Це схоже на потенційний fraud-сценарій. Я не можу самостійно блокувати картку або оформлювати chargeback. Рекомендую: 1) заблокувати картку в застосунку; 2) звернутися до служби підтримки; 3) перевірити останні транзакції по credit card. У даних знайдено 2 підозрілі транзакції.,
-delivery_simulation,baseline,Якщо зменшити витрати на доставку вдвічі — яка економія за рік?,ok,True,simulation,,True,simulate_category_reduction,simulate_category_reduction,True,True,True,21.86,1,"Якщо зменшити витрати на доставку на 50%, орієнтовна економія за рік: $764.5.",
-delivery_simulation,crew,Якщо зменшити витрати на доставку вдвічі — яка економія за рік?,ok,True,simulation,simulation,True,simulate_category_reduction,"router_agent, data_analyst_agent, simulate_category_reduction, advisor_agent",True,True,True,24.02,3,"Якщо зменшити витрати на delivery на 50%, економія за 12 міс. складе приблизно $764.5.",
-out_of_scope_stocks,baseline,Купи мені акції Tesla,ok,True,out_of_scope,,True,none,,True,True,True,0.58,0,"Це поза моїм скоупом. Я не можу купувати акції, криптовалюту або давати інвестиційні накази. Можу допомогти з аналізом витрат, підписок, доставки, кави, кредитної картки та підозрілих транзакцій.",
-out_of_scope_stocks,crew,Купи мені акції Tesla,ok,True,out_of_scope,out_of_scope,True,none,"router_agent, data_analyst_agent, none, advisor_agent",True,True,True,4.2,3,"Це поза моїм скоупом. Я не можу купувати акції, криптовалюту або давати інвестиційні накази. Можу допомогти з аналізом витрат, підписок, доставки, кави, кредитної картки та підозрілих транзакцій.",
-dataset_summary,baseline,Що ти можеш аналізувати?,ok,True,dataset_summary,,True,dataset_summary,dataset_summary,True,True,True,20.31,1,"Я можу аналізувати витрати, підписки, доставку, каву, кредитну картку та підозрілі транзакції. У датасеті 842 транзакції за період 2024-12-01 11:14:00 — 2025-11-30 16:50:00.",
-dataset_summary,crew,Що ти можеш аналізувати?,ok,True,dataset_summary,dataset_summary,True,dataset_summary,"router_agent, data_analyst_agent, dataset_summary, advisor_agent",True,True,True,28.52,3,"У датасеті 842 транзакції. Період: 2024-12-01 11:14:00 — 2025-11-30 16:50:00. Можу аналізувати витрати, доставку, каву, підписки, кредитну картку та suspicious транзакції.",
-sportlife_specific,baseline,Що зі Sportlife?,ok,True,subscriptions,,True,subscriptions_summary,subscriptions_summary,True,True,True,36.58,1,Знайшов можливі забуті підписки: Sportlife ($15.0/міс).,
-sportlife_specific,crew,Що зі Sportlife?,ok,True,subscriptions,subscriptions,True,subscriptions_summary,"router_agent, data_analyst_agent, subscriptions_summary, advisor_agent",True,True,True,48.7,3,"Можливі забуті підписки: Sportlife — $15.0/міс, останній платіж 2025-07-07",
+﻿case_id,architecture,question,status,success,intent_expected,intent_actual,intent_ok,tool_expected,tools_actual,tool_ok,must_include_ok,forbidden_ok,latency_ms,trace_steps,tokens,cost_usd,warnings,answer,error
+coffee_monthly_crew,baseline,Скільки я витрачаю на каву?,ok,True,coffee,,True,monthly_category_spending,monthly_category_spending,True,True,True,5232.88,1,979,0.0,,"Щомісяця ти витрачаєш на каву (coffee) близько 80-90 гривень. Минулого місяця це було 84.10 грн, і ти зробив 17 кавових покупок. Середня вартість однієї покупки — десь 5 гривень.",
+coffee_monthly_crew,crew,Скільки я витрачаю на каву?,ok,True,coffee,coffee,True,monthly_category_spending,"router_agent, data_analyst_agent, monthly_category_spending, advisor_agent",True,True,True,6077.31,3,958,0.0,,Щомісяця ти витрачаєш на каву (coffee) близько 80-90 гривень. Минулого місяця було 17 покупок на суму 84.10 гривень. Твоя кавова звичка досить стабільна.,
+coffee_case_ukrainian,baseline,Скільки я витрачаю на каву?,ok,True,coffee,,True,monthly_category_spending,monthly_category_spending,True,True,True,3681.03,1,1004,0.0,,"Щомісяця ти витрачаєш на каву (coffee) близько 80-90 гривень. Минулого місяця це було 84.10 грн, і ти зробив 17 кавових покупок. 
+
+Середній чек за каву виходить десь 5 гривень. Схоже, що ти любиш каву, але не надто розкошуєш.",
+coffee_case_ukrainian,crew,Скільки я витрачаю на каву?,ok,True,coffee,coffee,True,monthly_category_spending,"router_agent, data_analyst_agent, monthly_category_spending, advisor_agent",True,True,True,3276.06,3,960,0.0,,Щомісяця ти витрачаєш на каву (coffee) близько 80-90 гривень. Минулого місяця було 17 транзакцій на суму 84.10 гривень. Твоя кавова звичка досить стабільна.,
+savings_200,baseline,Де можна зекономити $200 цього місяця?,ok,True,savings_advice,,True,savings_opportunities,savings_opportunities,True,True,True,5169.19,1,888,0.0,,"Привіт! Я проаналізував твої витрати і маю кілька порад з економії:
+
+1. Доставка їжі [delivery]: зменшити витрати на 50%, що дасть економію $63.71
+2. Кава [coffee]: готувати каву вдома замість покупок, заощадиш $28.98
+3. Підписки [subscriptions]: перевірити та скасувати непотрібний абонемент Sportlife, економія $15.0
+
+Загальна потенційна економія зараз $107.69, що майже наполовину менше від твоєї цілі в $200. Раджу продовжити пошук додаткових варіантів економії.
+
+Бажаєш детальніше розглянути кожен напрямок?",
+savings_200,crew,Де можна зекономити $200 цього місяця?,ok,True,savings_advice,savings_advice,True,savings_opportunities,"router_agent, data_analyst_agent, savings_opportunities, advisor_agent",True,True,True,5846.86,3,863,0.0,,"Привіт! 
+
+Я проаналізував твої витрати і знайшов кілька класних способів заощадити:
+
+1. Доставка їжі [delivery]: зменшити витрати на 50% — заощадиш $63.71
+2. Кава [coffee]: готувати каву вдома замість покупної — заощадиш $28.98
+3. Передплати [subscriptions]: перевірити підписку Sportlife — можливо заощадити $15.00
+
+Загальна потенційна економія: $107.69 з цільових $200. 
+
+Поки що виходить трохи менше від запланованого, але вже непогано! Спробуй реалізувати ці кроки.",
+netflix_last_payment,baseline,Дата останнього платежу за Netflix?,ok,True,last_payment,,True,last_payment,last_payment,True,True,True,2934.84,1,522,0.0,"LLM answer rejected because it missed required parts: 11, 00, 12.0","Останній платіж за Netflix: 2025-11-10 20:25:00, сума $12.0.",
+netflix_last_payment,crew,Дата останнього платежу за Netflix?,ok,True,last_payment,last_payment,True,last_payment,"router_agent, data_analyst_agent, last_payment, advisor_agent",True,True,True,2486.25,3,518,0.0,"LLM answer rejected because it missed required parts: 11, 00, 12.0","Останній платіж за Netflix: 2025-11-10 20:25:00, сума $12.0.",
+subscriptions_forgotten,baseline,Які підписки можуть бути забутими?,ok,True,subscriptions,,True,subscriptions_summary,subscriptions_summary,True,True,True,2951.52,1,1061,0.0,LLM answer rejected because it missed required parts: 15.0,Знайшов можливі забуті підписки: Sportlife ($15.0/міс).,
+subscriptions_forgotten,crew,Які підписки можуть бути забутими?,ok,True,subscriptions,subscriptions,True,subscriptions_summary,"router_agent, data_analyst_agent, subscriptions_summary, advisor_agent",True,True,True,4740.05,3,1130,0.0,"LLM answer rejected because it missed required parts: 15.0, 2025, 07, 07","Можливі забуті підписки: Sportlife — $15.0/міс, останній платіж 2025-07-07",
+delivery_late_night,baseline,Скільки витрат на доставку після 21:00?,ok,True,delivery,,True,late_night_delivery_stats,late_night_delivery_stats,True,True,True,3894.46,1,695,0.0,"LLM answer rejected because it missed required parts: 1529.0, 687.0, 49.18","На доставку витрачено $1529.0. Після 21:00 — $687.0, це 49.18% замовлень.",
+delivery_late_night,crew,Скільки витрат на доставку після 21:00?,ok,True,delivery,delivery,True,late_night_delivery_stats,"router_agent, data_analyst_agent, late_night_delivery_stats, advisor_agent",True,True,True,3931.89,3,713,0.0,LLM answer rejected because it missed required parts: 1529.0,"Доставка: $1529.0 загалом. Після 21:00 — $687.0, це 49.18% замовлень. Це хороший кандидат для економії без болючого урізання всього бюджету.",
+weekend_spike,baseline,Порівняй витрати у будні та вихідні,ok,True,weekend,,True,weekend_vs_weekday_stats,weekend_vs_weekday_stats,True,True,True,5809.49,1,774,0.0,,"Привіт! 
+
+Проаналізувавши твої витрати, помітив цікаву динаміку:
+
+✦ Будні:
+- Кількість транзакцій: 651
+- Середній чек: 32.24 грн
+- Загальні витрати: 20 987.76 грн
+
+✦ Вихідні:
+- Кількість транзакцій: 179
+- Середній чек: 45.27 грн
+- Загальні витрати: 8 102.69 грн
+
+Цікаво, що у вихідні ти витрачаєш на 40.41% більше за одну транзакцію, хоча загальна кількість покупок менша. Схоже, що вихідні для тебе — час більш розкішних або доданих витрат.
+
+Може, варто звернути увагу на витрати у вихідні? 🤔",
+weekend_spike,crew,Порівняй витрати у будні та вихідні,ok,True,weekend,weekend,True,weekend_vs_weekday_stats,"router_agent, data_analyst_agent, weekend_vs_weekday_stats, advisor_agent",True,True,True,5122.72,3,726,0.0,,"Аналіз твоїх витрат показує цікаву динаміку:
+
+✅ Будні:
+• 651 транзакція
+• Середній чек: 32.24 грн
+• Загальні витрати: 20 987.76 грн
+
+🎉 Вихідні:
+• 179 транзакцій
+• Середній чек: 45.27 грн
+• Загальні витрати: 8 102.69 грн
+
+Цікаво, що в вихідні ти витрачаєш на 40.41% більше за одну транзакцію, хоча загальна кількість покупок менша.
+
+Рекомендація: зверни увагу на витрати у вихідні, адже середній чек помітно вищий.",
+credit_card_behavior,baseline,Як швидше виплатити кредитну картку?,ok,True,credit_card,,True,credit_card_behavior,credit_card_behavior,True,True,True,5843.68,1,1170,0.0,,"Привіт! Ось план швидшої виплати кредитної картки:
+
+1. Загальна сума боргу: 934 грн
+2. Зараз ти сплачуєш мінімальні платежі по 50 грн
+3. Кращі місяці для збільшення платежів:
+   - Лютий: +458 грн
+   - Травень: +520 грн
+   - Серпень: +453 грн
+   - Листопад: +414 грн
+
+Рекомендації:
+- Намагайся платити більше 50 грн щомісяця
+- Використовуй місяці з підвищеними платежами для прискорення погашення
+- Спрямуй додаткові кошти на картку
+
+Так ти швидше закриєш борг і зменшиш переплату відсотків.",
+credit_card_behavior,crew,Як швидше виплатити кредитну картку?,ok,True,credit_card,credit_card,True,credit_card_behavior,"router_agent, data_analyst_agent, credit_card_behavior, advisor_agent",True,True,True,4991.01,3,1129,0.0,,"Привіт! 
+
+Бачу, що зараз твоя стратегія повернення кредитної заборгованості не дуже ефективна. 
+
+Рекомендації:
+1. Збільш щомісячні платежі - зараз вони здебільшого по 50 грн
+2. Роби більші платежі в місяці з великими сумами (458, 519, 453 грн)
+3. Намагайся платити більше мінімальної суми
+
+Загальна сума витрат на картці: 934 грн. 
+
+Щоб швидше закрити борг, плануй платежі не менше 200-300 грн щомісяця.",
+top_categories,baseline,Топ-5 категорій витрат,ok,True,top_categories,,True,top_categories,top_categories,True,True,True,4196.46,1,775,0.0,LLM answer rejected because it missed required parts: 12947.0,Топ категорія витрат: groceries — $12947.0 за 180 транзакцій.,
+top_categories,crew,Топ-5 категорій витрат,ok,True,top_categories,top_categories,True,top_categories,"router_agent, data_analyst_agent, top_categories, advisor_agent",True,True,True,4317.0,3,819,0.0,"LLM answer rejected because it missed required parts: 12947.0, 5148.5, 2245.46, 1681.71, 1529.0",Топ категорій витрат: groceries — $12947.0; shopping — $5148.5; credit_payment — $2245.46; health — $1681.71; delivery — $1529.0,
+fraud_booking,baseline,"Я не робив транзакцію Booking.com, це шахрайство?",ok,True,fraud_escalation,,True,suspicious_transactions,suspicious_transactions,True,True,True,4370.72,1,985,0.0,,"Привіт! 
+
+Я бачу транзакцію Booking.com на 703 USD від 15 січня 2025 року, яку ти не впізнаєш. Це може бути шахрайство.
+
+Термінові кроки:
+1. Негайно заблокуй картку в мобільному додатку
+2. Зверніся до служби підтримки банку
+3. Підготуй документи для оскарження транзакції
+
+Банк допоможе розібратися та повернути кошти, якщо це дійсно шахрайство.",
+fraud_booking,crew,"Я не робив транзакцію Booking.com, це шахрайство?",ok,True,fraud_escalation,fraud_escalation,True,suspicious_transactions,"router_agent, data_analyst_agent, suspicious_transactions, advisor_agent",True,True,True,23.71,3,0,0.0,,Це схоже на потенційний fraud-сценарій. Я не можу самостійно блокувати картку або оформлювати chargeback. Рекомендую: 1) заблокувати картку в застосунку; 2) звернутися до служби підтримки; 3) перевірити останні транзакції по credit card. У даних знайдено 2 підозрілі транзакції.,
+fraud_aliexpress,baseline,"Я не робив транзакцію AliExpress, що робити?",ok,True,fraud_escalation,,True,suspicious_transactions,suspicious_transactions,True,True,True,3860.04,1,965,0.0,,"Привіт! 
+
+Я бачу підозрілу транзакцію в AliExpress на 231 USD від 16.04.2025. 
+
+Терміново потрібно:
+1. Заблокувати картку в мобільному додатку
+2. Звернутися до служби підтримки банку
+3. Написати заяву про оскарження транзакції
+
+Банк допоможе повернути кошти та розслідувати випадок шахрайства. Бережи свої гроші!",
+fraud_aliexpress,crew,"Я не робив транзакцію AliExpress, що робити?",ok,True,fraud_escalation,fraud_escalation,True,suspicious_transactions,"router_agent, data_analyst_agent, suspicious_transactions, advisor_agent",True,True,True,24.41,3,0,0.0,,Це схоже на потенційний fraud-сценарій. Я не можу самостійно блокувати картку або оформлювати chargeback. Рекомендую: 1) заблокувати картку в застосунку; 2) звернутися до служби підтримки; 3) перевірити останні транзакції по credit card. У даних знайдено 2 підозрілі транзакції.,
+delivery_simulation,baseline,Якщо зменшити витрати на доставку вдвічі — яка економія за рік?,ok,True,simulation,,True,simulate_category_reduction,simulate_category_reduction,True,True,True,3771.82,1,612,0.0,LLM answer rejected because it missed required parts: 50,"Якщо зменшити витрати на доставку на 50%, орієнтовна економія за рік: $764.5.",
+delivery_simulation,crew,Якщо зменшити витрати на доставку вдвічі — яка економія за рік?,ok,True,simulation,simulation,True,simulate_category_reduction,"router_agent, data_analyst_agent, simulate_category_reduction, advisor_agent",True,True,True,3290.84,3,595,0.0,"LLM answer rejected because it missed required parts: 50, 12","Якщо зменшити витрати на delivery на 50%, економія за 12 міс. складе приблизно $764.5.",
+out_of_scope_stocks,baseline,Купи мені акції Tesla,ok,True,out_of_scope,,True,none,,True,True,True,0.64,0,0,0.0,,"Це поза моїм скоупом. Я не можу купувати акції, криптовалюту або давати інвестиційні накази. Можу допомогти з аналізом витрат, підписок, доставки, кави, кредитної картки та підозрілих транзакцій.",
+out_of_scope_stocks,crew,Купи мені акції Tesla,ok,True,out_of_scope,out_of_scope,True,none,"router_agent, data_analyst_agent, none, advisor_agent",True,True,True,2.66,3,0,0.0,,"Це поза моїм скоупом. Я не можу купувати акції, криптовалюту або давати інвестиційні накази. Можу допомогти з аналізом витрат, підписок, доставки, кави, кредитної картки та підозрілих транзакцій.",
+dataset_summary,baseline,Що ти можеш аналізувати?,ok,True,dataset_summary,,True,dataset_summary,dataset_summary,True,True,True,4954.62,1,776,0.0,"LLM answer rejected because it missed required parts: 2024, 12, 01, 11, 14, 00, 2025, 11, 30, 16, 50, 00, delivery, subscriptions, credit_card","Я можу аналізувати витрати, підписки, доставку, каву, кредитну картку та підозрілі транзакції. У датасеті 842 транзакції за період 2024-12-01 11:14:00 — 2025-11-30 16:50:00.",
+dataset_summary,crew,Що ти можеш аналізувати?,ok,True,dataset_summary,dataset_summary,True,dataset_summary,"router_agent, data_analyst_agent, dataset_summary, advisor_agent",True,True,True,4667.63,3,831,0.0,"LLM answer rejected because it missed required parts: 12, 01, 11, 14, 11, 30, 16, 50","У датасеті 842 транзакції. Період: 2024-12-01 11:14:00 — 2025-11-30 16:50:00. Можу аналізувати витрати, доставку, каву, підписки, кредитну картку та suspicious транзакції.",
+sportlife_specific,baseline,Що зі Sportlife?,ok,True,subscriptions,,True,subscriptions_summary,subscriptions_summary,True,True,True,3666.05,1,1067,0.0,"LLM answer rejected because it missed required parts: 15.0, subscriptions",Знайшов можливі забуті підписки: Sportlife ($15.0/міс).,
+sportlife_specific,crew,Що зі Sportlife?,ok,True,subscriptions,subscriptions,True,subscriptions_summary,"router_agent, data_analyst_agent, subscriptions_summary, advisor_agent",True,True,True,3302.61,3,1088,0.0,"LLM answer rejected because it missed required parts: 15.0, 07, 07, subscriptions","Можливі забуті підписки: Sportlife — $15.0/міс, останній платіж 2025-07-07",
