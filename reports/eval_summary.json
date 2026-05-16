@@ -1,0 +1,30 @@
+{
+  "baseline": {
+    "total_cases": 15,
+    "success_count": 15,
+    "success_rate": 1.0,
+    "tool_selection_accuracy": 1.0,
+    "groundedness_proxy": 1.0,
+    "latency_p50_ms": 42.09,
+    "latency_p95_ms": 87.83,
+    "avg_trace_steps": 0.93,
+    "cost_per_task_usd": 0,
+    "tokens_per_task": 0
+  },
+  "crew": {
+    "total_cases": 15,
+    "success_count": 15,
+    "success_rate": 1.0,
+    "tool_selection_accuracy": 1.0,
+    "groundedness_proxy": 1.0,
+    "latency_p50_ms": 38.85,
+    "latency_p95_ms": 86.82,
+    "avg_trace_steps": 3.0,
+    "cost_per_task_usd": 0,
+    "tokens_per_task": 0
+  },
+  "comparison": {
+    "crew_extra_trace_steps": 2.07,
+    "note": "Cost and token metrics are 0 because this stage uses deterministic local rule-based agents without LLM calls."
+  }
+}

@@ -1,0 +1,137 @@
+[
+  {
+    "id": "coffee_monthly_crew",
+    "question": "Скільки я витрачаю на каву?",
+    "architectures": ["baseline", "crew"],
+    "expected_intent": "coffee",
+    "expected_tool": "monthly_category_spending",
+    "must_include": ["84.1", "17"],
+    "forbidden_phrases": ["не знаю", "немає даних"]
+  },
+  {
+    "id": "coffee_case_ukrainian",
+    "question": "Скільки я витрачаю на каву?",
+    "architectures": ["baseline", "crew"],
+    "expected_intent": "coffee",
+    "expected_tool": "monthly_category_spending",
+    "must_include": ["каву"],
+    "forbidden_phrases": ["датасеті 842"]
+  },
+  {
+    "id": "savings_200",
+    "question": "Де можна зекономити $200 цього місяця?",
+    "architectures": ["baseline", "crew"],
+    "expected_intent": "savings_advice",
+    "expected_tool": "savings_opportunities",
+    "must_include": ["delivery", "coffee", "Sportlife"],
+    "forbidden_phrases": ["просто менше витрачай"]
+  },
+  {
+    "id": "netflix_last_payment",
+    "question": "Дата останнього платежу за Netflix?",
+    "architectures": ["baseline", "crew"],
+    "expected_intent": "last_payment",
+    "expected_tool": "last_payment",
+    "must_include": ["Netflix", "2025-11-10", "12"],
+    "forbidden_phrases": ["не знайшов"]
+  },
+  {
+    "id": "subscriptions_forgotten",
+    "question": "Які підписки можуть бути забутими?",
+    "architectures": ["baseline", "crew"],
+    "expected_intent": "subscriptions",
+    "expected_tool": "subscriptions_summary",
+    "must_include": ["Sportlife", "15"],
+    "forbidden_phrases": ["ACME Corp Salary"]
+  },
+  {
+    "id": "delivery_late_night",
+    "question": "Скільки витрат на доставку після 21:00?",
+    "architectures": ["baseline", "crew"],
+    "expected_intent": "delivery",
+    "expected_tool": "late_night_delivery_stats",
+    "must_include": ["687", "49.18"],
+    "forbidden_phrases": ["приблизно не знаю"]
+  },
+  {
+    "id": "weekend_spike",
+    "question": "Порівняй витрати у будні та вихідні",
+    "architectures": ["baseline", "crew"],
+    "expected_intent": "weekend",
+    "expected_tool": "weekend_vs_weekday_stats",
+    "must_include": ["будні", "вихідні"],
+    "forbidden_phrases": ["не можу"]
+  },
+  {
+    "id": "credit_card_behavior",
+    "question": "Як швидше виплатити кредитну картку?",
+    "architectures": ["baseline", "crew"],
+    "expected_intent": "credit_card",
+    "expected_tool": "credit_card_behavior",
+    "must_include": ["кредит"],
+    "forbidden_phrases": ["візьми ще кредит"]
+  },
+  {
+    "id": "top_categories",
+    "question": "Топ-5 категорій витрат",
+    "architectures": ["baseline", "crew"],
+    "expected_intent": "top_categories",
+    "expected_tool": "top_categories",
+    "must_include": ["groceries"],
+    "forbidden_phrases": ["виглядає що"]
+  },
+  {
+    "id": "fraud_booking",
+    "question": "Я не робив транзакцію Booking.com, це шахрайство?",
+    "architectures": ["baseline", "crew"],
+    "expected_intent": "fraud_escalation",
+    "expected_tool": "suspicious_transactions",
+    "must_include": ["підтримки", "2"],
+    "forbidden_phrases": ["я повернув гроші", "chargeback оформлено"]
+  },
+  {
+    "id": "fraud_aliexpress",
+    "question": "Я не робив транзакцію AliExpress, що робити?",
+    "architectures": ["baseline", "crew"],
+    "expected_intent": "fraud_escalation",
+    "expected_tool": "suspicious_transactions",
+    "must_include": ["підтримки"],
+    "forbidden_phrases": ["транзакцію скасовано"]
+  },
+  {
+    "id": "delivery_simulation",
+    "question": "Якщо зменшити витрати на доставку вдвічі — яка економія за рік?",
+    "architectures": ["baseline", "crew"],
+    "expected_intent": "simulation",
+    "expected_tool": "simulate_category_reduction",
+    "must_include": ["764.5"],
+    "forbidden_phrases": ["не можу порахувати"]
+  },
+  {
+    "id": "out_of_scope_stocks",
+    "question": "Купи мені акції Tesla",
+    "architectures": ["baseline", "crew"],
+    "expected_intent": "out_of_scope",
+    "expected_tool": "none",
+    "must_include": ["поза", "скоупом"],
+    "forbidden_phrases": ["купую", "купив"]
+  },
+  {
+    "id": "dataset_summary",
+    "question": "Що ти можеш аналізувати?",
+    "architectures": ["baseline", "crew"],
+    "expected_intent": "dataset_summary",
+    "expected_tool": "dataset_summary",
+    "must_include": ["842"],
+    "forbidden_phrases": ["купити акції", "купую акції", "купив акції"]
+  },
+  {
+    "id": "sportlife_specific",
+    "question": "Що зі Sportlife?",
+    "architectures": ["baseline", "crew"],
+    "expected_intent": "subscriptions",
+    "expected_tool": "subscriptions_summary",
+    "must_include": ["Sportlife", "15"],
+    "forbidden_phrases": ["немає"]
+  }
+]
