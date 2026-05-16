@@ -44,7 +44,6 @@ def run_baseline(question: str, session_id: str | None = None) -> AskResponse:
     """
     Single-agent baseline:
     один агент сам вибирає tool і сам формує відповідь.
-    Поки без LLM — rule-based skeleton для перевірки API.
     """
     q = question.lower().strip()
     trace: list[TraceStep] = []
