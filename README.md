@@ -4,12 +4,12 @@ Multi-agent система **Personal Finance Coach** для аналізу фі
 
 Проєкт реалізує домашнє завдання Lesson 11 з теми **AI Agents and Tool Orchestration**.
 
-Основна ідея: порівняти дві архітектури:
+Основна мета: порівняти дві архітектури:
 
 - `baseline` — single-agent baseline;
-- `crew` — multi-agent crew з 3 агентів.
+- `crew` — multi-agent crew з 3 спеціалізованих агентів.
 
-Система працює з наданим файлом `transactions.csv`, не генерує власні дані та не вигадує фінансові показники. Усі числові значення беруться з deterministic pandas tools.
+Система працює з наданим файлом `transactions.csv`, не генерує власні дані та не вигадує фінансові показники. Усі фінансові розрахунки виконуються deterministic pandas tools, а LLM використовується тільки для фінального формулювання відповіді.
 
 ---
 
@@ -19,9 +19,12 @@ Multi-agent система **Personal Finance Coach** для аналізу фі
 
 - single-agent baseline;
 - multi-agent crew з 3 агентів;
+- pandas tools для аналізу `transactions.csv`;
+- LLM answer synthesis через OpenRouter;
+- модель `anthropic/claude-3.5-haiku`;
+- validation/fallback для захисту від hallucinations;
 - FastAPI endpoint `/ask`;
 - Streamlit UI для demo;
-- pandas tools для аналізу `transactions.csv`;
 - golden set із 15 тестових задач;
 - local evaluation baseline vs crew;
 - LangSmith tracing;
@@ -40,7 +43,9 @@ Baseline — це один агент, який самостійно:
 1. приймає питання користувача;
 2. визначає intent;
 3. вибирає потрібний tool;
-4. формує відповідь.
+4. формує deterministic fallback answer;
+5. передає результат у LLM для фінального answer synthesis;
+6. повертає fallback, якщо LLM-відповідь не проходить validation.
 
 Схема:
 
@@ -51,7 +56,13 @@ single-agent baseline
     ↓
 financial tool
     ↓
-answer
+deterministic fallback answer
+    ↓
+OpenRouter LLM answer synthesis
+    ↓
+validation
+    ↓
+final answer
 ```
 
 ---
@@ -64,7 +75,9 @@ Crew складається з трьох агентів:
 |---|---|
 | `router_agent` | визначає intent запиту |
 | `data_analyst_agent` | викликає потрібний financial tool |
-| `advisor_agent` | формує фінальну відповідь |
+| `advisor_agent` | формує deterministic fallback answer |
+
+Після цього LLM формулює фінальну відповідь на основі tool result та fallback answer.
 
 Схема:
 
@@ -77,12 +90,36 @@ data_analyst_agent
     ↓
 advisor_agent
     ↓
-answer
+OpenRouter LLM answer synthesis
+    ↓
+validation
+    ↓
+final answer
 ```
 
 ---
 
-## 3. Основні сценарії
+## 3. LLM answer synthesis
+
+LLM використовується тільки для фінального формулювання відповіді.
+
+Важливо:
+
+- фінансові розрахунки виконує pandas, не LLM;
+- LLM не рахує суми самостійно;
+- LLM отримує `tool_result` і `deterministic fallback answer`;
+- якщо LLM-відповідь втрачає важливі числа або сутності, система повертає deterministic fallback;
+- для safety-сценаріїв `fraud_escalation` та `out_of_scope` використовується контрольована поведінка.
+
+Використана модель:
+
+```text
+anthropic/claude-3.5-haiku через OpenRouter
+```
+
+---
+
+## 4. Основні сценарії
 
 Система вміє відповідати на такі запити:
 
@@ -126,9 +163,13 @@ answer
 Якщо зменшити витрати на доставку вдвічі — яка економія за рік?
 ```
 
+```text
+Купи мені акції Tesla
+```
+
 ---
 
-## 4. Дані
+## 5. Дані
 
 Система використовує файл:
 
@@ -161,7 +202,7 @@ app/data/transactions.csv
 
 ---
 
-## 5. Financial tools
+## 6. Financial tools
 
 | Tool | Призначення |
 |---|---|
@@ -180,7 +221,7 @@ app/data/transactions.csv
 
 ---
 
-## 6. Edge cases
+## 7. Edge cases
 
 ### Fraud escalation
 
@@ -228,7 +269,7 @@ app/data/transactions.csv
 доставка ≠ доставку
 ```
 
-Для простого deterministic MVP використано stem-like ключі:
+Для простого MVP використано stem-like ключі:
 
 ```text
 кав
@@ -237,10 +278,10 @@ app/data/transactions.csv
 
 ---
 
-## 7. Структура проєкту
+## 8. Структура проєкту
 
 ```text
-lesson-11-personal-finance-crew/
+homework-personal-finance-crew/
 ├── app/
 │   ├── agents/
 │   │   ├── baseline_agent.py
@@ -255,6 +296,7 @@ lesson-11-personal-finance-crew/
 │   │   └── finance_tools.py
 │   ├── __init__.py
 │   ├── config.py
+│   ├── llm.py
 │   ├── main.py
 │   ├── schemas.py
 │   └── tracing.py
@@ -271,7 +313,7 @@ lesson-11-personal-finance-crew/
 
 ---
 
-## 8. Встановлення
+## 9. Встановлення
 
 ```powershell
 python -m venv .venv
@@ -282,23 +324,26 @@ pip install -r requirements.txt
 
 ---
 
-## 9. Налаштування `.env`
+## 10. Налаштування `.env`
 
 Створи файл `.env` у корені проєкту.
 
-Для EU LangSmith workspace:
-
 ```env
+# LangSmith
 LANGSMITH_TRACING=true
-LANGSMITH_API_KEY=your_langsmith_api_key
+LANGSMITH_API_KEY=your_langsmith_key_here
 LANGSMITH_PROJECT=lesson-11-personal-finance-crew
 LANGSMITH_ENDPOINT=https://eu.api.smith.langchain.com
 
-LANGCHAIN_TRACING_V2=true
-LANGCHAIN_API_KEY=your_langsmith_api_key
-LANGCHAIN_PROJECT=lesson-11-personal-finance-crew
-LANGCHAIN_ENDPOINT=https://eu.api.smith.langchain.com
+# OpenRouter LLM
+USE_LLM=true
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
+OPENROUTER_MODEL=anthropic/claude-3.5-haiku
+OPENROUTER_SITE_URL=http://localhost:8000
+OPENROUTER_APP_NAME=Lesson 11 Personal Finance Crew
 
+# App
 APP_ENV=local
 DATA_PATH=app/data/transactions.csv
 ```
@@ -307,7 +352,7 @@ DATA_PATH=app/data/transactions.csv
 
 ---
 
-## 10. Запуск FastAPI
+## 11. Запуск FastAPI
 
 ```powershell
 python -m uvicorn app.main:app --reload
@@ -329,10 +374,10 @@ ok     personal-finance-crew
 
 ---
 
-## 11. Приклад API-запиту
+## 12. Приклад API-запиту
 
 ```powershell
-Invoke-RestMethod -Uri "http://127.0.0.1:8000/ask" -Method Post -ContentType "application/json" -Body '{"question":"Скільки я витрачаю на каву?","architecture":"crew"}' | ConvertTo-Json -Depth 10
+Invoke-RestMethod -Uri "http://127.0.0.1:8000/ask" -Method Post -ContentType "application/json" -Body '{"question":"Де можна зекономити $200 цього місяця?","architecture":"crew"}' | ConvertTo-Json -Depth 10
 ```
 
 Архітектури:
@@ -344,7 +389,7 @@ crew
 
 ---
 
-## 12. Запуск Streamlit UI
+## 13. Запуск Streamlit UI
 
 В окремому терміналі:
 
@@ -368,7 +413,7 @@ http://localhost:8501
 
 ---
 
-## 13. Local evaluation
+## 14. Local evaluation
 
 Golden set містить 15 тестових задач.
 
@@ -385,7 +430,7 @@ reports/eval_results.csv
 reports/eval_summary.json
 ```
 
-Поточний результат:
+Поточний результат з LLM answer synthesis:
 
 | Metric | Baseline | Crew |
 |---|---:|---:|
@@ -394,15 +439,15 @@ reports/eval_summary.json
 | Success rate | 1.0 | 1.0 |
 | Tool selection accuracy | 1.0 | 1.0 |
 | Groundedness proxy | 1.0 | 1.0 |
-| Latency p50, ms | 27.90 | 26.26 |
-| Latency p95, ms | 66.19 | 58.39 |
+| Latency p50, ms | 3894.46 | 3931.89 |
+| Latency p95, ms | 5843.68 | 6077.31 |
 | Avg trace steps | 0.93 | 3.0 |
-| Cost per task, USD | 0 | 0 |
-| Tokens per task | 0 | 0 |
+| Tokens per task | 818.2 | 688.67 |
+| Cost per task, USD | 0.0 | 0.0 |
 
 ---
 
-## 14. LangSmith tracing and experiments
+## 15. LangSmith tracing and experiments
 
 Проєкт підтримує LangSmith tracing через `@traceable`.
 
@@ -413,6 +458,7 @@ Tracing підключено для:
 - `router_agent`;
 - `data_analyst_agent`;
 - `advisor_agent`;
+- `openrouter_answer_synthesizer`;
 - tool execution.
 
 Для EU workspace використовується endpoint:
@@ -441,11 +487,11 @@ lesson-11-personal-finance-crew-golden-set
 python -m app.eval.run_langsmith_eval
 ```
 
-Створені experiments:
+Створені experiments з LLM answer synthesis:
 
 ```text
-lesson-11-baseline-91379d20
-lesson-11-crew-cafa14dd
+lesson-11-baseline-9c86df00
+lesson-11-crew-f4e8cf79
 ```
 
 LangSmith experiments дозволяють дивитися:
@@ -456,26 +502,6 @@ LangSmith experiments дозволяють дивитися:
 - evaluator scores;
 - traces;
 - baseline vs crew comparison.
-
----
-
-## 15. Результати LangSmith experiments
-
-Після запуску:
-
-```powershell
-python -m app.eval.run_langsmith_eval
-```
-
-було створено:
-
-```text
-Dataset: lesson-11-personal-finance-crew-golden-set
-Experiment: lesson-11-baseline-91379d20
-Experiment: lesson-11-crew-cafa14dd
-```
-
-Це підтверджує, що evaluation працює не тільки локально через CSV, а також через LangSmith UI.
 
 ---
 
@@ -494,10 +520,10 @@ Baseline простіший і має менше orchestration steps.
 Crew має більший orchestration overhead, але краще показує процес прийняття рішення:
 
 ```text
-router_agent → data_analyst_agent → advisor_agent
+router_agent → data_analyst_agent → advisor_agent → openrouter_answer_synthesizer
 ```
 
-Для простого deterministic MVP baseline достатній. Для production-системи crew краще масштабується, бо дозволяє окремо розвивати routing, financial analysis, safety та response synthesis.
+Для простого MVP baseline достатній. Для production-системи crew краще масштабується, бо дозволяє окремо розвивати routing, financial analysis, safety та response synthesis.
 
 ---
 
@@ -505,15 +531,14 @@ router_agent → data_analyst_agent → advisor_agent
 
 Поточна реалізація має такі обмеження:
 
-- deterministic rule-based prototype;
-- без LLM-викликів;
-- cost і tokens дорівнюють 0;
 - routing реалізовано через keywords;
 - multi-turn memory мінімальна;
 - немає persistent user storage;
-- немає production authentication.
+- немає production authentication;
+- немає реального banking API;
+- cost у local eval не рахується локально, бо залежить від OpenRouter billing/model pricing.
 
-Це свідомий MVP-підхід: спочатку реалізовано grounded calculations та evaluation, щоб уникнути hallucinations.
+При цьому фінансові розрахунки grounded: усі суми беруться з `transactions.csv` через pandas tools.
 
 ---
 
@@ -521,15 +546,15 @@ router_agent → data_analyst_agent → advisor_agent
 
 Можливі покращення:
 
-- додати LLM для natural language understanding;
 - додати LangGraph або інший orchestration framework;
 - реалізувати persistent memory;
 - додати SQLite/Postgres storage;
 - додати складніший intent classifier;
-- додати cost/tokens metrics для LLM-режиму;
+- додати cost calculation для OpenRouter;
 - додати більше golden set cases;
 - додати richer Streamlit dashboard;
-- додати unit tests.
+- додати unit tests для tools;
+- додати окремого safety/compliance agent.
 
 ---
 
@@ -560,13 +585,13 @@ python -m uvicorn app.main:app --reload
 - single-agent baseline;
 - multi-agent crew.
 
-Обидві архітектури успішно пройшли golden set із 15 задач.
-
 Проєкт містить:
 
 - FastAPI API;
 - Streamlit demo UI;
 - financial tools;
+- OpenRouter LLM answer synthesis;
+- validation fallback;
 - local eval;
 - LangSmith tracing;
 - LangSmith dataset and experiments;
