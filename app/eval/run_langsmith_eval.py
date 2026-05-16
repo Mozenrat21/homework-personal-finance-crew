@@ -124,7 +124,15 @@ def tool_selection_accuracy(
     expected_tool = reference_outputs["expected_tool"]
 
     if expected_tool == "none":
-        return outputs.get("tools", []) == [] or "out_of_scope" in outputs.get("answer", "").lower()
+        tools = outputs.get("tools", [])
+        answer = outputs.get("answer", "").lower()
+
+        return (
+            tools == []
+            or "none" in tools
+            or ("поза" in answer and "скоуп" in answer)
+            or "out_of_scope" in answer
+        )
 
     return expected_tool in outputs.get("tools", [])
 

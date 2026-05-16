@@ -5,8 +5,8 @@
     "success_rate": 1.0,
     "tool_selection_accuracy": 1.0,
     "groundedness_proxy": 1.0,
-    "latency_p50_ms": 42.09,
-    "latency_p95_ms": 87.83,
+    "latency_p50_ms": 24.66,
+    "latency_p95_ms": 186.9,
     "avg_trace_steps": 0.93,
     "cost_per_task_usd": 0,
     "tokens_per_task": 0
@@ -17,8 +17,8 @@
     "success_rate": 1.0,
     "tool_selection_accuracy": 1.0,
     "groundedness_proxy": 1.0,
-    "latency_p50_ms": 38.85,
-    "latency_p95_ms": 86.82,
+    "latency_p50_ms": 28.48,
+    "latency_p95_ms": 93.01,
     "avg_trace_steps": 3.0,
     "cost_per_task_usd": 0,
     "tokens_per_task": 0

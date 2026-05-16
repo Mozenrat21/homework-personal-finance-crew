@@ -389,8 +389,8 @@ reports/eval_summary.json
 | Success rate | 1.0 | 1.0 |
 | Tool selection accuracy | 1.0 | 1.0 |
 | Groundedness proxy | 1.0 | 1.0 |
-| Latency p50, ms | 27.90 | 26.26 |
-| Latency p95, ms | 66.19 | 58.39 |
+| Latency p50, ms | 42.09 | 38.85 |
+| Latency p95, ms | 87.83 | 86.82 |
 | Avg trace steps | 0.93 | 3.0 |
 | Cost per task, USD | 0 | 0 |
 | Tokens per task | 0 | 0 |
